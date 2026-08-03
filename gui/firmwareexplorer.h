@@ -2,14 +2,7 @@
 #define FIRMWAREEXPLORER_H
 
 #include <QTreeWidget>
-#include <QVector>
-
-struct FirmwareNode {
-    QString name;
-    QString type;
-    uint64_t size;
-    uint64_t offset;
-};
+#include "hexis_models.h"
 
 class FirmwareExplorer : public QTreeWidget
 {
@@ -17,10 +10,11 @@ class FirmwareExplorer : public QTreeWidget
 
 public:
     explicit FirmwareExplorer(QWidget *parent = nullptr);
-    void populateSimulatedData();
+    void setFirmware(HexisFirmware* fw);
+    void populateFromFirmware();
 
 private:
-    void addNode(QTreeWidgetItem *parent, const FirmwareNode &data);
+    HexisFirmware* m_fw;
 };
 
 #endif // FIRMWAREEXPLORER_H

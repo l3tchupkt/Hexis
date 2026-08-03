@@ -6,6 +6,9 @@ add_library(hexis SHARED
     src/hexis_chip.c
     src/hexis_driver.c
     src/plugin.c
+    src/hexis_firmware.c
+    src/hexis_parser.c
+    src/parsers/elf.c
     drivers/ch341a/ch341a.c
     firmware/analyzer.c
     firmware/scanner.c

@@ -2,8 +2,8 @@
 #define HEXEDITOR_H
 
 #include <QAbstractScrollArea>
-#include <QByteArray>
 #include <QPaintEvent>
+#include "hexis_models.h"
 
 class HexEditor : public QAbstractScrollArea
 {
@@ -11,8 +11,8 @@ class HexEditor : public QAbstractScrollArea
 
 public:
     explicit HexEditor(QWidget *parent = nullptr);
-    void setData(const QByteArray &data);
-    QByteArray data() const;
+    void setFirmware(HexisFirmware* fw);
+    HexisFirmware* firmware() const;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -21,7 +21,7 @@ protected:
 private:
     void adjustScrollbars();
 
-    QByteArray m_data;
+    HexisFirmware* m_fw;
     int m_charWidth;
     int m_charHeight;
     int m_bytesPerLine;

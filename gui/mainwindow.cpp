@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "hexeditor.h"
 #include "firmwareexplorer.h"
+#include "hexis_models.h"
 #include <QDockWidget>
 #include <QTextEdit>
 #include <QVBoxLayout>
@@ -22,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    if (m_hexEditor && m_hexEditor->firmware()) {
+        hexis_firmware_free(m_hexEditor->firmware());
+    }
 }
 
 void MainWindow::setupDashboard()
@@ -70,15 +74,21 @@ void MainWindow::setupDashboard()
     // -- Hex Editor Tab --
     m_hexEditor = new HexEditor();
     
-    // Mock data for Hex Editor display testing
-    QByteArray mockData;
-    mockData.fill(0x00, 1024 * 1024); // 1 MB of zeros
-    for(int i=0; i<1024; i++) mockData[i] = i % 256;
-    m_hexEditor->setData(mockData);
+    // Mock data for Hex Editor display testing via Backend API
+    HexisFirmware* fw = hexis_firmware_create(1024 * 1024);
+    if (fw) {
+        for (int i=0; i<1024; i++) {
+            uint8_t val = i % 256;
+            hexis_firmware_write(fw, i, &val, 1);
+        }
+        m_hexEditor->setFirmware(fw);
+    }
     
     // -- Firmware Explorer Tab --
     m_fwExplorer = new FirmwareExplorer();
-    m_fwExplorer->populateSimulatedData();
+    if (fw) {
+        m_fwExplorer->setFirmware(fw);
+    }
     
     m_tabWidget->addTab(dashWidget, "Dashboard");
     m_tabWidget->addTab(m_hexEditor, "Hex Editor");
