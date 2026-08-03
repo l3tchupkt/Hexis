@@ -1,7 +1,7 @@
 # Hexis
 
 <div align="center">
-  <h3>Universal Hardware Hacking & Firmware Analysis Framework</h3>
+  <h3>Universal Hardware Pentesting & Firmware Analysis Framework</h3>
   <i>The "Ghidra + Wireshark + Flashrom" of hardware security.</i>
 </div>
 
