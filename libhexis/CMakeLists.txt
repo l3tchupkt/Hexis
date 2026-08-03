@@ -5,6 +5,7 @@ add_library(hexis SHARED
     src/hexis.c
     src/hexis_chip.c
     src/hexis_driver.c
+    src/plugin.c
     drivers/ch341a/ch341a.c
     firmware/analyzer.c
     firmware/scanner.c
@@ -21,6 +22,7 @@ target_include_directories(hexis PRIVATE
 
 target_link_libraries(hexis PRIVATE
     ${LIBUSB_LIBRARIES}
+    ${CMAKE_DL_LIBS}
     m
 )
 
