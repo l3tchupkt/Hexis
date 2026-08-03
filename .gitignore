@@ -1,0 +1,22 @@
+# Build directories
+build/
+cmake-build-debug/
+cmake-build-release/
+out/
+bin/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.tox/
+dist/
+build/
+*.egg-info/
+.venv/
+venv/
