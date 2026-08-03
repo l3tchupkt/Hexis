@@ -14,6 +14,9 @@ add_library(hexis SHARED
     src/hexis_patch.c
     src/hexis_vfs.c
     src/hexis_session.c
+    src/crypto/sha256.c
+    src/project/hexis_cas.c
+    src/project/hexis_project.c
     src/parsers/elf.c
     drivers/ch341a/ch341a.c
     firmware/analyzer.c
