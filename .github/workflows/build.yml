@@ -25,6 +25,7 @@ jobs:
           CIBW_BUILD: cp38-* cp39-* cp310-* cp311-* cp312-*
           CIBW_ARCHS_LINUX: x86_64
           CIBW_ARCHS_WINDOWS: AMD64
+          CIBW_BEFORE_ALL_LINUX: "if command -v dnf >/dev/null 2>&1; then dnf install -y libusb1-devel; elif command -v yum >/dev/null 2>&1; then yum install -y libusb1-devel; elif command -v apt-get >/dev/null 2>&1; then apt-get update && apt-get install -y libusb-1.0-0-dev; else echo 'Unsupported package manager for libusb install'; exit 1; fi"
           CIBW_BEFORE_BUILD: pip install cmake cffi
           
       - uses: actions/upload-artifact@v4
