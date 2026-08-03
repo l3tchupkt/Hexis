@@ -26,5 +26,5 @@ enable_testing()
 add_subdirectory(libhexis)
 
 # GUI and other parts will be added in later phases
-# add_subdirectory(gui)
+add_subdirectory(gui)
 add_subdirectory(tests/c)
