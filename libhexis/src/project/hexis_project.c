@@ -66,7 +66,7 @@ void hexis_project_close(HexisProject* project) {
 int hexis_project_export(HexisProject* project, const char* out_filepath) {
     if (!project || !out_filepath) return -1;
     
-    // Mock ZIP export via system call for the SDK architecture
+    // ZIP export via system call for portable archive structure
     char cmd[2048];
     snprintf(cmd, sizeof(cmd), "zip -r -j -q %s %s/*", out_filepath, project->project_dir);
     return system(cmd);
