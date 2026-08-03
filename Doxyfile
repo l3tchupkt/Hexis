@@ -1,6 +1,6 @@
 PROJECT_NAME           = "Hexis"
 PROJECT_NUMBER         = "1.0.0"
-PROJECT_BRIEF          = "Universal Hardware Hacking & Firmware Analysis Framework"
+PROJECT_BRIEF          = "Universal Pentesting Hacking & Firmware Analysis Framework"
 
 OUTPUT_DIRECTORY       = docs/doxygen
 CREATE_SUBDIRS         = NO
