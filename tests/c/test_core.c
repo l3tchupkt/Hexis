@@ -10,10 +10,12 @@ void test_chip_lookup() {
     assert(chip != nullptr);
     assert(strcmp(chip->manufacturer, "Winbond") == 0);
     assert(chip->capacity_bytes == 8 * 1024 * 1024);
+    (void)chip;
     
     const hexis_chip_info_t* chip2 = hexis_chip_lookup_by_name("Macronix", "MX25L12835F");
     assert(chip2 != nullptr);
     assert(chip2->jedec_id == 0xC22018);
+    (void)chip2;
     
     assert(hexis_chip_lookup_by_jedec(0xDEADBEEF) == nullptr);
     printf("test_chip_lookup passed.\n");
@@ -37,10 +39,12 @@ void test_driver_registration() {
     // Duplicate registration should fail
     res = hexis_driver_register(&mock_driver);
     assert(res != 0);
+    (void)res;
     
     const hexis_driver_t* fetched = hexis_driver_get("mock");
     assert(fetched != nullptr);
     assert(strcmp(fetched->name, "mock") == 0);
+    (void)fetched;
     
     printf("test_driver_registration passed.\n");
 }

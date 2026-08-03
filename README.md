@@ -4,14 +4,13 @@
 
 ## Features
 
-- **Modular Driver Architecture (C23):** Native C core engineered for extreme performance. Currently supports `CH341A`, architected to effortlessly expand to `FT2232H`, `Bus Pirate`, `J-Link`, etc.
-- **Python Bindings (`cffi`):** Object-oriented Python API bridging natively to the core library.
-- **Modern CLI:** Beautiful terminal application built with `Typer` and `Rich`.
-- **Qt6 GUI Dashboard:** A sleek, dark-mode desktop frontend featuring live hardware metrics, memory viewers, and dockable control panels.
+- **Modular Driver Architecture (C23):** Native C core engineered for extreme performance with capability-based driver routing and transactional hooks (`CAP_SPI`, `CAP_UART`).
+- **Dual-Format Project System:** Store sessions as `.hexisproj` directories with Content-Addressed Storage (CAS) for firmware deduplication, or export as portable `.hexis` zip archives.
+- **Session Replay Engine:** Logs all read/write/erase interactions to recreate automated hardware pentesting sessions.
+- **Knowledge Graph & Virtual Filesystem:** Maps extracted firmware chunks into a hierarchical VFS and outputs findings to a native graph database structure.
+- **Event Bus & Job System:** Completely asynchronous Pub/Sub backend ensuring the GUI remains perfectly responsive during massive memory dumps.
 - **Firmware Analysis Engine:** Calculate Shannon entropy, parse ELF architectures, and scan for magic filesystem bytes (`SquashFS`, `uImage`, etc.).
 - **Secret & Vulnerability Scanner:** Lightning-fast POSIX regex scanner identifying AWS keys, private certificates, and weak crypto markers directly inside firmware blobs.
-- **Dynamic Plugin System:** Write extensions in C/C++ (`dlopen`) or Python to customize extraction logic.
-- **Reporting:** Export audit findings seamlessly to Markdown and JSON formats.
 
 ## Building
 
