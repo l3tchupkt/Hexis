@@ -56,12 +56,41 @@ def write(filename: str, driver: str = typer.Option("ch341a", help="Programmer d
 @app.command()
 def erase(driver: str = typer.Option("ch341a", help="Programmer driver to use")):
     """Erase the entire flash memory."""
-    console.print("[yellow]Erasing flash memory is not fully implemented in CLI yet.[/]")
+    try:
+        prog = Programmer(driver)
+        prog.connect()
+        prog.detect()
+        prog.erase()
+        console.print("[bold green]Successfully erased flash memory.[/]")
+    except HexisError as e:
+        console.print(f"[bold red]Error:[/] {e}")
 
 @app.command()
 def verify(filename: str, driver: str = typer.Option("ch341a", help="Programmer driver to use")):
     """Verify flash memory against a file."""
-    console.print("[yellow]Verify flash memory is not fully implemented in CLI yet.[/]")
+    try:
+        prog = Programmer(driver)
+        prog.connect()
+        prog.detect()
+        if prog.verify(filename):
+            console.print(f"[bold green]Verification successful. Flash matches {filename}.[/]")
+        else:
+            console.print(f"[bold red]Verification failed. Flash does not match {filename}.[/]")
+    except HexisError as e:
+        console.print(f"[bold red]Error:[/] {e}")
+
+@app.command()
+def backup(filename: str, driver: str = typer.Option("ch341a", help="Programmer driver to use")):
+    """Backup firmware to a file."""
+    # Backup is essentially a read operation for now. In the future it will create a project.
+    try:
+        prog = Programmer(driver)
+        prog.connect()
+        prog.detect()
+        prog.read(filename)
+        console.print(f"[bold green]Successfully backed up flash to {filename}[/]")
+    except HexisError as e:
+        console.print(f"[bold red]Error:[/] {e}")
 
 @app.command()
 def analyze(filename: str):

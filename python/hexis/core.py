@@ -85,5 +85,33 @@ class Programmer:
             raise HexisError("Failed to write flash memory.")
         print("Write successful.")
         
+    def erase(self):
+        if not self._connected or not self.chip_info:
+            raise HexisError("Programmer not connected or chip not detected.")
+        capacity = self.chip_info["capacity"]
+        print(f"Erasing {capacity} bytes of flash...")
+        res = self._driver.erase(self._ctx_ptr[0], 0, capacity)
+        if res != 0:
+            raise HexisError("Failed to erase flash memory.")
+            
+    def verify(self, filename: str) -> bool:
+        if not self._connected or not self.chip_info:
+            raise HexisError("Programmer not connected or chip not detected.")
+        if not os.path.exists(filename):
+            raise FileNotFoundError(f"{filename} does not exist.")
+            
+        capacity = self.chip_info["capacity"]
+        with open(filename, "rb") as f:
+            data = f.read()
+        if len(data) > capacity:
+            raise HexisError("File is larger than flash capacity.")
+            
+        buffer = ffi.new(f"uint8_t[{len(data)}]", data)
+        print(f"Verifying {len(data)} bytes of flash...")
+        res = self._driver.verify(self._ctx_ptr[0], 0, buffer, len(data))
+        if res == 0:
+            return True
+        return False
+        
     def __del__(self):
         self.disconnect()
