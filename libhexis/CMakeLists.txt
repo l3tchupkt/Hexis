@@ -7,6 +7,7 @@ add_library(hexis SHARED
     src/hexis_driver.c
     drivers/ch341a/ch341a.c
     firmware/analyzer.c
+    firmware/scanner.c
 )
 
 target_include_directories(hexis PUBLIC
