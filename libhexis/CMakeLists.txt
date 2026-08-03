@@ -1,5 +1,15 @@
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
+if(WIN32)
+    find_path(LIBUSB_INCLUDE_DIR NAMES libusb.h PATH_SUFFIXES libusb-1.0)
+    find_library(LIBUSB_LIBRARY NAMES usb-1.0 libusb-1.0)
+    if(NOT LIBUSB_INCLUDE_DIR OR NOT LIBUSB_LIBRARY)
+        message(WARNING "libusb-1.0 not found. Please set LIBUSB_INCLUDE_DIR and LIBUSB_LIBRARY, or use vcpkg to install libusb.")
+    endif()
+    set(LIBUSB_INCLUDE_DIRS ${LIBUSB_INCLUDE_DIR})
+    set(LIBUSB_LIBRARIES ${LIBUSB_LIBRARY})
+else()
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
+endif()
 
 add_library(hexis SHARED
     src/hexis.c
@@ -32,11 +42,17 @@ target_include_directories(hexis PRIVATE
     ${LIBUSB_INCLUDE_DIRS}
 )
 
-target_link_libraries(hexis PRIVATE
-    ${LIBUSB_LIBRARIES}
-    ${CMAKE_DL_LIBS}
-    m
-)
+if(WIN32)
+    target_link_libraries(hexis PRIVATE
+        ${LIBUSB_LIBRARIES}
+    )
+else()
+    target_link_libraries(hexis PRIVATE
+        ${LIBUSB_LIBRARIES}
+        ${CMAKE_DL_LIBS}
+        m
+    )
+endif()
 
 
 # In later phases, we will add driver source files and sub-libraries.
