@@ -1,6 +1,6 @@
 # Hexis
 
-**Hexis** is a professional, cross-platform hardware hacking and firmware pentesting framework. It acts as the "Ghidra + Wireshark + Flashrom" of hardware security, providing an end-to-end pipeline from physical flash extraction to binary security analysis.
+**Hexis** is a professional, cross-platform hardware pentesting and firmware pentesting framework. It acts as the "Ghidra + Wireshark + Flashrom" of hardware security, providing an end-to-end pipeline from physical flash extraction to binary security analysis.
 
 ## Features
 
