@@ -5,6 +5,8 @@
 #include <stddef.h>
 #include "hexis.h"
 
+#include "hexis_graph.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,17 +37,11 @@ typedef struct {
  * @brief Scan a firmware buffer for secrets and vulnerabilities.
  * @param buffer Pointer to the firmware data.
  * @param length Size of the firmware data.
- * @param out_report Pointer to report struct to populate. 
- *                   Must be freed with hexis_scan_report_free.
+ * @param out_graph Pointer to graph struct to populate. 
+ *                   Must be freed with hexis_graph_free.
  * @return 0 on success.
  */
-HEXIS_API int hexis_fw_scan_secrets(const uint8_t* buffer, size_t length, hexis_scan_report_t** out_report);
-
-/**
- * @brief Free the scan report.
- * @param report The report to free.
- */
-HEXIS_API void hexis_scan_report_free(hexis_scan_report_t* report);
+HEXIS_API int hexis_fw_scan_secrets(const uint8_t* buffer, size_t length, HexisGraph** out_graph);
 
 #ifdef __cplusplus
 }

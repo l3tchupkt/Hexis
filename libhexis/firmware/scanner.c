@@ -47,29 +47,28 @@ static HexisSecurityRule g_builtin_rules[] = {
 
 static const size_t g_num_rules = sizeof(g_builtin_rules) / sizeof(g_builtin_rules[0]);
 
-int hexis_fw_scan_secrets(const uint8_t* buffer, size_t length, hexis_scan_report_t** out_report) {
-    if (!buffer || !out_report) return -1;
+#include "hexis_graph.h"
+
+int hexis_fw_scan_secrets(const uint8_t* buffer, size_t length, HexisGraph** out_graph) {
+    if (!buffer || !out_graph) return -1;
     
-    // Legacy support implementation bridging to new engine logic
-    *out_report = calloc(1, sizeof(hexis_scan_report_t));
-    if (!*out_report) return -1;
+    *out_graph = hexis_graph_create();
+    if (!*out_graph) return -1;
     
-    // Allocate space for up to 128 findings for this POC
-    size_t capacity = 128;
-    (*out_report)->findings = calloc(capacity, sizeof(hexis_finding_t));
+    HexisGraphNode* root_node = hexis_graph_add_node(*out_graph, NODE_FIRMWARE, "Scanned Firmware Buffer", NULL);
     
     for (size_t i = 0; i < length; ++i) {
         for (size_t r = 0; r < g_num_rules; ++r) {
-            HexisFinding generic_finding = {0};
-            if (g_builtin_rules[r].match(buffer, length, i, &generic_finding)) {
+            HexisFinding* generic_finding = (HexisFinding*)calloc(1, sizeof(HexisFinding));
+            
+            if (g_builtin_rules[r].match(buffer, length, i, generic_finding)) {
+                generic_finding->offset = i;
+                generic_finding->description = g_builtin_rules[r].title;
                 
-                if ((*out_report)->count < capacity) {
-                    hexis_finding_t* f = &(*out_report)->findings[(*out_report)->count++];
-                    f->offset = i;
-                    f->description = g_builtin_rules[r].title;
-                    f->type = HEXIS_VULN_DEFAULT_CREDS; // Map to legacy enum temporarily
-                    strncpy(f->matched_text, generic_finding.matched_text, sizeof(f->matched_text) - 1);
-                }
+                HexisGraphNode* finding_node = hexis_graph_add_node(*out_graph, NODE_FINDING, g_builtin_rules[r].id, generic_finding);
+                hexis_graph_add_edge(root_node, finding_node, EDGE_CONTAINS);
+            } else {
+                free(generic_finding);
             }
         }
     }
@@ -77,8 +76,4 @@ int hexis_fw_scan_secrets(const uint8_t* buffer, size_t length, hexis_scan_repor
     return 0;
 }
 
-void hexis_scan_report_free(hexis_scan_report_t* report) {
-    if (!report) return;
-    if (report->findings) free(report->findings);
-    free(report);
-}
+// Legacy scan API removed in favor of hexis_graph_free

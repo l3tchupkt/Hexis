@@ -8,6 +8,12 @@ add_library(hexis SHARED
     src/plugin.c
     src/hexis_firmware.c
     src/hexis_parser.c
+    src/hexis_event.c
+    src/hexis_job.c
+    src/hexis_graph.c
+    src/hexis_patch.c
+    src/hexis_vfs.c
+    src/hexis_session.c
     src/parsers/elf.c
     drivers/ch341a/ch341a.c
     firmware/analyzer.c

@@ -2,6 +2,7 @@
 #include "hexeditor.h"
 #include "firmwareexplorer.h"
 #include "hexis_models.h"
+#include "hexis_patch.h"
 #include <QDockWidget>
 #include <QTextEdit>
 #include <QVBoxLayout>
@@ -81,6 +82,14 @@ void MainWindow::setupDashboard()
             uint8_t val = i % 256;
             hexis_firmware_write(fw, i, &val, 1);
         }
+        
+        // Mocking a Patch Engine transaction
+        HexisPatchQueue* pq = hexis_patch_queue_create();
+        uint8_t patched_magic[] = {0xDE, 0xAD, 0xBE, 0xEF};
+        hexis_patch_add(pq, 0x10, NULL, patched_magic, 4, "Injecting test marker");
+        hexis_patch_apply_transaction(fw, pq);
+        hexis_patch_queue_free(pq);
+        
         m_hexEditor->setFirmware(fw);
     }
     

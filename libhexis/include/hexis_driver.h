@@ -14,12 +14,25 @@ extern "C" {
 // Forward declaration of the internal device handle context
 typedef struct hexis_device_context hexis_device_context_t;
 
+typedef enum {
+    CAP_SPI       = (1 << 0),
+    CAP_UART      = (1 << 1),
+    CAP_GPIO      = (1 << 2),
+    CAP_I2C       = (1 << 3),
+    CAP_EEPROM    = (1 << 4),
+    CAP_NOR       = (1 << 5),
+    CAP_NAND      = (1 << 6),
+    CAP_OTP       = (1 << 7),
+    CAP_QUAD_SPI  = (1 << 8)
+} hexis_capability_t;
+
 /**
  * @brief Driver operations table representing a hardware programmer interface.
  */
 typedef struct {
     const char* name;
     const char* description;
+    uint32_t capabilities; // Bitmask of hexis_capability_t
     
     // Connect to the hardware programmer
     int (*connect)(hexis_device_context_t** ctx);
@@ -47,6 +60,11 @@ typedef struct {
     
     // Identify the connected programmer hardware (e.g., firmware version, serial)
     int (*identify)(hexis_device_context_t* ctx, char* identity_buf, size_t buf_len);
+
+    // Transaction System
+    int (*transaction_begin)(hexis_device_context_t* ctx);
+    int (*transaction_commit)(hexis_device_context_t* ctx);
+    int (*transaction_rollback)(hexis_device_context_t* ctx);
 
 } hexis_driver_t;
 
