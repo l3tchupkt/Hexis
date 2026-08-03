@@ -9,12 +9,12 @@ class Programmer:
     Python wrapper for the Hexis Programmer API.
     """
     def __init__(self, driver_name: str = "ch341a"):
+        self._connected = False
         self._driver = lib.hexis_driver_get(driver_name.encode('utf-8'))
-        if not self._driver:
+        if self._driver == ffi.NULL:
             raise HexisError(f"Driver '{driver_name}' not found or not registered.")
             
         self._ctx_ptr = ffi.new("hexis_device_context_t **")
-        self._connected = False
         self.chip_info = None
 
     def connect(self):

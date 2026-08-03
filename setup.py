@@ -57,5 +57,6 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     packages=["hexis"],
     package_dir={"": "python"},
-    cffi_modules=["python/hexis/build_ffi.py:ffibuilder"],
+    package_data={"hexis": ["*.so", "*.dll", "*.dylib"]},
+    include_package_data=True,
 )

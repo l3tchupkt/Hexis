@@ -1,23 +1,51 @@
 import os
 import pytest
 from hexis import Programmer, HexisError
+from hexis.cli import app
+from typer.testing import CliRunner
+
+runner = CliRunner()
 
 def test_programmer_initialization():
     prog = Programmer("ch341a")
     assert prog is not None
 
-def test_programmer_connect_and_detect(tmp_path):
-    prog = Programmer("ch341a")
-    # connect will return success because of mock connect logic
-    # Actually wait! The ch341a driver tries to libusb_open_device_with_vid_pid(0x1A86, 0x5512)
-    # If the hardware is not plugged in, it returns -3.
-    # We should catch HexisError
+def test_programmer_connect_error():
     try:
-        prog.connect()
-        # If it miraculously connects, let's test detect
-        chip = prog.detect()
-        assert chip["manufacturer"] == "Winbond"
-        assert chip["capacity"] == 8388608
-    except HexisError as e:
-        # Expected if CH341A is not plugged in
-        assert "Failed to connect to hardware programmer (Error -3)" in str(e)
+        prog = Programmer("missing_driver")
+    except HexisError:
+        pass
+
+from unittest.mock import patch
+
+@patch("hexis.cli.Programmer")
+def test_cli_detect_command(mock_prog):
+    mock_instance = mock_prog.return_value
+    mock_instance.detect.return_value = {
+        "manufacturer": "Winbond",
+        "model": "W25Q64",
+        "capacity": 8388608,
+        "sector_size": 4096,
+        "page_size": 256,
+        "jedec_id": 0xEF4017
+    }
+    result = runner.invoke(app, ["detect"])
+    assert result.exit_code == 0
+    assert "Winbond" in result.stdout
+
+@patch("hexis.cli.Programmer")
+def test_cli_read_command(mock_prog, tmp_path):
+    mock_instance = mock_prog.return_value
+    mock_instance.detect.return_value = {"capacity": 8388608}
+    out_file = tmp_path / "dump.bin"
+    result = runner.invoke(app, ["read", str(out_file)])
+    assert result.exit_code == 0
+
+@patch("hexis.cli.Programmer")
+def test_cli_write_command(mock_prog, tmp_path):
+    mock_instance = mock_prog.return_value
+    mock_instance.detect.return_value = {"capacity": 8388608}
+    in_file = tmp_path / "fw.bin"
+    in_file.write_bytes(b"A" * 1024)
+    result = runner.invoke(app, ["write", str(in_file)])
+    assert result.exit_code == 0

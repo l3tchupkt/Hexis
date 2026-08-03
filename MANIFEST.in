@@ -1,0 +1,8 @@
+include CMakeLists.txt
+recursive-include libhexis *
+recursive-include tests *
+recursive-include python *
+recursive-include gui *
+recursive-include plugins *
+include README.md
+include LICENSE

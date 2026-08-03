@@ -1,27 +1,16 @@
 site_name: Hexis Documentation
 site_description: Universal Hardware Pentesting & Firmware Analysis Framework
-site_author: l3tchupkt
+repo_url: https://github.com/l3tchupkt/Hexis
 
 theme:
   name: material
   palette:
-    scheme: slate
     primary: deep purple
     accent: cyan
 
 nav:
   - Home: index.md
   - Architecture: architecture.md
-  - User Guide:
-      - CLI Reference: cli.md
-      - GUI Dashboard: gui.md
-  - API Reference: api.md
-  - Plugin Development: plugins.md
-
-markdown_extensions:
-  - admonition
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - pymdownx.superfences
+  - CLI Guide: cli.md
+  - GUI Guide: gui.md
+  - Plugins: plugins.md
