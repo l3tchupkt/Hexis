@@ -1,0 +1,27 @@
+site_name: Hexis Documentation
+site_description: Universal Hardware Hacking & Firmware Analysis Framework
+site_author: l3tchupkt
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: deep purple
+    accent: cyan
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - User Guide:
+      - CLI Reference: cli.md
+      - GUI Dashboard: gui.md
+  - API Reference: api.md
+  - Plugin Development: plugins.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

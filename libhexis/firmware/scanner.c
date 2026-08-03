@@ -16,7 +16,12 @@ static const secret_regex_t patterns[] = {
     { HEXIS_SECRET_PRIVATE_KEY, "-----BEGIN [A-Z ]*PRIVATE KEY-----", "Private Cryptographic Key" },
     { HEXIS_SECRET_JWT, "eyJ[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*", "JSON Web Token (JWT)" },
     { HEXIS_VULN_WEAK_CRYPTO, "DES-CBC", "Weak Cryptography Algorithm (DES)" },
-    { HEXIS_VULN_DEFAULT_CREDS, "root:root", "Default Root Credentials" }
+    { HEXIS_VULN_DEFAULT_CREDS, "root:root", "Default Root Credentials" },
+    { HEXIS_VULN_WEAK_CRYPTO, "OpenSSL 1\\.0\\.[0-9][a-z]", "Outdated OpenSSL Version Detected" },
+    { HEXIS_VULN_WEAK_CRYPTO, "BusyBox v1\\.1[0-9]", "Legacy BusyBox Version" },
+    { HEXIS_VULN_WEAK_CRYPTO, "Linux version 2\\.6\\.[0-9]+", "Legacy Linux Kernel 2.6.x" },
+    { HEXIS_VULN_WEAK_CRYPTO, "nc -e /bin/sh", "Netcat Backdoor Shell" },
+    { HEXIS_VULN_WEAK_CRYPTO, "chmod 777", "Insecure Permissions (World Writable)" }
 };
 
 static const size_t num_patterns = sizeof(patterns) / sizeof(patterns[0]);

@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "hexeditor.h"
+#include "firmwareexplorer.h"
 #include <QDockWidget>
 #include <QTextEdit>
 #include <QVBoxLayout>
@@ -6,9 +8,10 @@
 #include <QLabel>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QTabWidget>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent), m_tabWidget(nullptr), m_hexEditor(nullptr), m_fwExplorer(nullptr)
 {
     setWindowTitle("Hexis Hardware Hacking Framework");
     resize(1200, 800);
@@ -23,8 +26,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupDashboard()
 {
-    QWidget* centralWidget = new QWidget(this);
-    QVBoxLayout* layout = new QVBoxLayout(centralWidget);
+    m_tabWidget = new QTabWidget(this);
+    
+    // -- Dashboard Tab --
+    QWidget* dashWidget = new QWidget();
+    QVBoxLayout* layout = new QVBoxLayout(dashWidget);
     
     QLabel* header = new QLabel("<h2>Dashboard</h2>");
     header->setAlignment(Qt::AlignCenter);
@@ -60,7 +66,25 @@ void MainWindow::setupDashboard()
     btnLayout->addWidget(new QPushButton("Verify"));
     
     layout->addWidget(btnWidget);
-    setCentralWidget(centralWidget);
+    
+    // -- Hex Editor Tab --
+    m_hexEditor = new HexEditor();
+    
+    // Mock data for Hex Editor display testing
+    QByteArray mockData;
+    mockData.fill(0x00, 1024 * 1024); // 1 MB of zeros
+    for(int i=0; i<1024; i++) mockData[i] = i % 256;
+    m_hexEditor->setData(mockData);
+    
+    // -- Firmware Explorer Tab --
+    m_fwExplorer = new FirmwareExplorer();
+    m_fwExplorer->populateSimulatedData();
+    
+    m_tabWidget->addTab(dashWidget, "Dashboard");
+    m_tabWidget->addTab(m_hexEditor, "Hex Editor");
+    m_tabWidget->addTab(m_fwExplorer, "Firmware Explorer");
+    
+    setCentralWidget(m_tabWidget);
 }
 
 void MainWindow::setupDocks()

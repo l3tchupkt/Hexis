@@ -10,6 +10,10 @@ add_executable(hexis-gui
     main.cpp
     mainwindow.cpp
     mainwindow.h
+    hexeditor.cpp
+    hexeditor.h
+    firmwareexplorer.cpp
+    firmwareexplorer.h
 )
 
 target_link_libraries(hexis-gui PRIVATE Qt6::Widgets hexis)
